@@ -4,7 +4,7 @@ Daily Curio is a multi-topic online magazine (tech, money, health, travel, food,
 
 The layout is set up to bring in more pageviews per visit, which means more ad impressions: a featured homepage, topic hubs, "Up next" and "You might also like" blocks on every article, and topic grids on every page. It also has the About, Contact, Privacy and Terms pages that ad networks look for when they review a site.
 
-## Tech
+## Tech 
 
 - TanStack Start (React 19) + Vite, deployed on Netlify
 - Content Collections: articles are Markdown files in `content/posts/`
