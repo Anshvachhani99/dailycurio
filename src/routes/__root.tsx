@@ -3,10 +3,13 @@ import {
   Link,
   Scripts,
   createRootRoute,
+  useRouterState,
 } from '@tanstack/react-router'
 
-import { SponsoredLink } from '@/components/sponsored-link'
-import { monetag, monetagEnabled } from '@/lib/ads'
+import {
+  AdsterraBanner,
+  AdsterraNativeBanner,
+} from '@/components/adsterra-ad'
 import {
   featuredCategories,
   siteDescription,
@@ -64,21 +67,14 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  })
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
-        {monetag.verificationMeta && (
-          <meta name="monetag" content={monetag.verificationMeta} />
-        )}
-        {monetagEnabled && (
-          <script
-            src={monetag.multiTagSrc}
-            data-zone={monetag.zoneId}
-            data-cfasync="false"
-            async
-          />
-        )}
       </head>
       <body className="min-h-screen flex flex-col">
         <a
@@ -89,7 +85,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </a>
         <SiteHeader />
         <main id="main-content" className="flex-1">
+          <AdsterraBanner key={`banner-${pathname}`} />
           {children}
+          <AdsterraNativeBanner key={`native-${pathname}`} />
         </main>
         <SiteFooter />
         <Scripts />
@@ -115,7 +113,6 @@ function SiteHeader() {
         <Logo />
         <p className="hidden text-sm text-muted md:block">{siteTagline}</p>
         <div className="flex items-center gap-4">
-          <SponsoredLink variant="header" />
           <Link
             to="/about"
             className="text-sm font-medium hover:text-accent"
@@ -146,7 +143,7 @@ function SiteHeader() {
 
 function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-line bg-ink text-paper/80">
+    <footer className="mt-12 border-t border-line bg-ink text-paper/80">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[2fr_1fr_1fr]">
         <div>
           <p className="font-display text-2xl font-semibold text-paper">

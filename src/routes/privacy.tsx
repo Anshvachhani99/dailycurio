@@ -8,7 +8,7 @@ export const Route = createFileRoute('/privacy')({
   component: () => (
     <StaticPage
       title="Privacy policy"
-      intro="Last updated: 23 November 2026"
+      intro="Last updated: 27 November 2026"
     >
       <p>
         This policy explains what information {siteName} (“we”, “us”) and our
@@ -25,14 +25,14 @@ export const Route = createFileRoute('/privacy')({
       <h2>Advertising</h2>
       <p>
         This website is free to read because it shows advertising. We work
-        with third-party advertising partners, including Monetag. These
+        with third-party advertising partners, including Adsterra. These
         partners may use cookies, web beacons, local storage, and similar
         technologies to show ads, measure their performance, limit how often
         you see the same ad, and prevent fraud. They may collect information
         such as your IP address, device type, browser, approximate location,
-        and the pages you view. Some links on this site are marked
-        “Sponsored”; they lead to advertiser pages run by these partners, and
-        those pages have their own privacy policies.
+        and the pages you view. Ad units on this site are labeled
+        “Advertisement” and may link to advertiser pages that have their own
+        privacy policies.
       </p>
       <p>
         Some ad formats may ask your permission to send browser notifications.

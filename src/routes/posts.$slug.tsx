@@ -3,7 +3,6 @@ import { allPosts } from 'content-collections'
 
 import { CategoryLinks } from '@/components/category-links'
 import { PostCard, PostMeta } from '@/components/post-card'
-import { SponsoredLink } from '@/components/sponsored-link'
 import { TopicGrid } from '@/components/topic-grid'
 import { ArticleViewCount } from '@/components/view-count'
 import { cdnImage, findPost, newestPosts, relatedPosts } from '@/lib/blog'
@@ -89,8 +88,6 @@ function RouteComponent() {
           className="prose prose-lg prose-stone mt-10 max-w-none break-words prose-headings:font-semibold prose-a:text-accent prose-pre:overflow-x-auto prose-img:rounded-lg prose-table:text-base"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
-
-        <SponsoredLink />
 
         {next && next.slug !== post.slug && (
           <Link
