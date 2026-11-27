@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
 
+import {
+  AdsterraBanner,
+  AdsterraNativeBanner,
+} from '@/components/adsterra-ad'
 import { PostCard } from '@/components/post-card'
 import { TopicGrid } from '@/components/topic-grid'
+import { adsterra } from '@/lib/ads'
 import { newestPosts } from '@/lib/blog'
 import { categoryBlurbs, siteName } from '@/lib/site'
 
@@ -56,7 +61,19 @@ function RouteComponent() {
         </p>
       )}
 
-      <section className="mt-16">
+      <div className="mt-12 flex flex-col items-center gap-8">
+        <AdsterraBanner
+          key={`cat-rect-${category}`}
+          unit={adsterra.banners.rectangle300x250}
+        />
+        <AdsterraNativeBanner
+          key={`cat-native-${category}`}
+          unit={adsterra.native.inArticle}
+          className="w-full"
+        />
+      </div>
+
+      <section className="mt-12">
         <h2 className="mb-6 text-2xl font-semibold md:text-3xl">
           More topics
         </h2>

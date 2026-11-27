@@ -53,3 +53,18 @@ export function readingTime(html: string) {
   const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean)
   return Math.max(1, Math.round(words.length / 220))
 }
+
+/**
+ * Split rendered article HTML cleanly at a section boundary near the middle
+ * so in-article ad blocks never interrupt an open tag, list, or table.
+ */
+export function splitHtmlAtHeading(html: string): [string, string] {
+  const headings = [...html.matchAll(/<h2\b/gi)]
+  if (headings.length >= 2) {
+    const splitAt = headings[Math.floor(headings.length / 2)]?.index
+    if (splitAt !== undefined && splitAt > 0) {
+      return [html.slice(0, splitAt), html.slice(splitAt)]
+    }
+  }
+  return [html, '']
+}

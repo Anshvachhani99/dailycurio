@@ -1,11 +1,24 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
 
+import {
+  AdsterraBanner,
+  AdsterraDesktopSidebarBanner,
+  AdsterraNativeBanner,
+  SponsoredDirectLink,
+} from '@/components/adsterra-ad'
 import { CategoryLinks } from '@/components/category-links'
 import { PostCard, PostMeta } from '@/components/post-card'
 import { TopicGrid } from '@/components/topic-grid'
 import { ArticleViewCount } from '@/components/view-count'
-import { cdnImage, findPost, newestPosts, relatedPosts } from '@/lib/blog'
+import { adsterra } from '@/lib/ads'
+import {
+  cdnImage,
+  findPost,
+  newestPosts,
+  relatedPosts,
+  splitHtmlAtHeading,
+} from '@/lib/blog'
 import { siteName } from '@/lib/site'
 
 export const Route = createFileRoute('/posts/$slug')({
@@ -43,68 +56,117 @@ function RouteComponent() {
   const ordered = newestPosts(allPosts)
   const index = ordered.findIndex((p) => p.slug === post.slug)
   const next = ordered[(index + 1) % ordered.length]
+  const [firstHalfHtml, secondHalfHtml] = splitHtmlAtHeading(post.html)
 
   return (
     <div className="mx-auto max-w-6xl px-4">
-      <article className="mx-auto max-w-3xl py-10">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted">
-          <Link to="/" className="hover:text-accent">
-            Home
-          </Link>
-          {post.categories[0] && (
-            <>
-              <span aria-hidden="true"> / </span>
-              <Link
-                to="/category/$category"
-                params={{ category: post.categories[0] }}
-                className="hover:text-accent"
-              >
-                {post.categories[0]}
-              </Link>
-            </>
-          )}
-        </nav>
-        <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-          {post.title}
-        </h1>
-        <p className="mt-4 text-xl text-muted">{post.summary}</p>
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-line py-3">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <PostMeta post={post} />
-            <ArticleViewCount slug={post.slug} />
+      <div className="py-10 lg:grid lg:grid-cols-[minmax(0,1fr)_184px] lg:items-start lg:gap-8">
+        <article className="mx-auto max-w-3xl lg:mx-0">
+          <nav aria-label="Breadcrumb" className="text-sm text-muted">
+            <Link to="/" className="hover:text-accent">
+              Home
+            </Link>
+            {post.categories[0] && (
+              <>
+                <span aria-hidden="true"> / </span>
+                <Link
+                  to="/category/$category"
+                  params={{ category: post.categories[0] }}
+                  className="hover:text-accent"
+                >
+                  {post.categories[0]}
+                </Link>
+              </>
+            )}
+          </nav>
+          <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
+            {post.title}
+          </h1>
+          <p className="mt-4 text-xl text-muted">{post.summary}</p>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-line py-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <PostMeta post={post} />
+              <ArticleViewCount slug={post.slug} />
+            </div>
+            <CategoryLinks categories={post.categories} />
           </div>
-          <CategoryLinks categories={post.categories} />
-        </div>
-        {post.image && (
-          <img
-            src={cdnImage(post.image, 1200)}
-            alt={post.imageAlt ?? post.title}
-            width={1200}
-            height={675}
-            className="mt-8 aspect-video w-full rounded-2xl object-cover"
-          />
-        )}
-        <div
-          className="prose prose-lg prose-stone mt-10 max-w-none break-words prose-headings:font-semibold prose-a:text-accent prose-pre:overflow-x-auto prose-img:rounded-lg prose-table:text-base"
-          dangerouslySetInnerHTML={{ __html: post.html }}
-        />
+          {post.image && (
+            <img
+              src={cdnImage(post.image, 1200)}
+              alt={post.imageAlt ?? post.title}
+              width={1200}
+              height={675}
+              className="mt-8 aspect-video w-full rounded-2xl object-cover"
+            />
+          )}
 
-        {next && next.slug !== post.slug && (
-          <Link
-            to="/posts/$slug"
-            params={{ slug: next.slug }}
-            className="group mt-12 block rounded-2xl border border-line bg-white p-6 hover:border-accent"
-          >
-            <p className="text-xs font-semibold uppercase tracking-wider text-accent">
-              Up next →
-            </p>
-            <p className="mt-2 font-display text-2xl font-semibold group-hover:text-accent">
-              {next.title}
-            </p>
-            <p className="mt-1 text-muted">{next.summary}</p>
-          </Link>
-        )}
-      </article>
+          <AdsterraBanner
+            key={`article-top-${post.slug}`}
+            unit={adsterra.banners.banner468Primary}
+            className="mt-8"
+          />
+
+          <div
+            className="prose prose-lg prose-stone mt-8 max-w-none break-words prose-headings:font-semibold prose-a:text-accent prose-pre:overflow-x-auto prose-img:rounded-lg prose-table:text-base"
+            dangerouslySetInnerHTML={{ __html: firstHalfHtml }}
+          />
+
+          <div className="my-8 flex flex-wrap items-start justify-center gap-4">
+            <AdsterraBanner
+              key={`article-mid-rect-${post.slug}`}
+              unit={adsterra.banners.rectangle300x250}
+            />
+            <AdsterraBanner
+              key={`article-mid-sky-${post.slug}`}
+              unit={adsterra.banners.skyscraper160x300}
+            />
+          </div>
+
+          {secondHalfHtml && (
+            <div
+              className="prose prose-lg prose-stone max-w-none break-words prose-headings:font-semibold prose-a:text-accent prose-pre:overflow-x-auto prose-img:rounded-lg prose-table:text-base"
+              dangerouslySetInnerHTML={{ __html: secondHalfHtml }}
+            />
+          )}
+
+          <SponsoredDirectLink />
+
+          <AdsterraNativeBanner
+            key={`article-native-${post.slug}`}
+            unit={adsterra.native.inArticle}
+            className="mt-8"
+          />
+
+          <AdsterraBanner
+            key={`article-end-banner-${post.slug}`}
+            unit={adsterra.banners.banner468Secondary}
+            className="mt-8"
+          />
+
+          {next && next.slug !== post.slug && (
+            <Link
+              to="/posts/$slug"
+              params={{ slug: next.slug }}
+              className="group mt-10 block rounded-2xl border border-line bg-white p-6 hover:border-accent"
+            >
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent">
+                Up next →
+              </p>
+              <p className="mt-2 font-display text-2xl font-semibold group-hover:text-accent">
+                {next.title}
+              </p>
+              <p className="mt-1 text-muted">{next.summary}</p>
+            </Link>
+          )}
+        </article>
+
+        <aside className="hidden lg:sticky lg:top-28 lg:block">
+          <AdsterraDesktopSidebarBanner
+            key={`article-sidebar-${post.slug}`}
+            unit={adsterra.banners.skyscraper160x600}
+          />
+        </aside>
+      </div>
 
       {related.length > 0 && (
         <section className="mt-6 border-t border-line pt-10">

@@ -7,9 +7,12 @@ import {
 } from '@tanstack/react-router'
 
 import {
-  AdsterraBanner,
+  AdsterraGlobalScripts,
   AdsterraNativeBanner,
+  AdsterraResponsiveBanner,
+  SponsoredDirectLink,
 } from '@/components/adsterra-ad'
+import { adsterra } from '@/lib/ads'
 import {
   featuredCategories,
   siteDescription,
@@ -85,11 +88,23 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </a>
         <SiteHeader />
         <main id="main-content" className="flex-1">
-          <AdsterraBanner key={`banner-${pathname}`} />
+          <div className="mx-auto max-w-6xl px-4 pt-5">
+            <AdsterraResponsiveBanner
+              key={`top-banner-${pathname}`}
+              desktop={adsterra.banners.leaderboard728x90}
+              mobile={adsterra.banners.mobile320x50}
+            />
+          </div>
           {children}
-          <AdsterraNativeBanner key={`native-${pathname}`} />
+          <div className="mx-auto mt-14 max-w-6xl px-4">
+            <AdsterraNativeBanner
+              key={`footer-native-${pathname}`}
+              unit={adsterra.native.footer}
+            />
+          </div>
         </main>
         <SiteFooter />
+        <AdsterraGlobalScripts />
         <Scripts />
       </body>
     </html>
@@ -113,6 +128,7 @@ function SiteHeader() {
         <Logo />
         <p className="hidden text-sm text-muted md:block">{siteTagline}</p>
         <div className="flex items-center gap-4">
+          <SponsoredDirectLink variant="header" />
           <Link
             to="/about"
             className="text-sm font-medium hover:text-accent"

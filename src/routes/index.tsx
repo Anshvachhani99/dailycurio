@@ -1,8 +1,13 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
 
+import {
+  AdsterraBanner,
+  AdsterraNativeBanner,
+} from '@/components/adsterra-ad'
 import { PostCard } from '@/components/post-card'
 import { TopicGrid } from '@/components/topic-grid'
+import { adsterra } from '@/lib/ads'
 import { newestPosts } from '@/lib/blog'
 import { siteTagline, trendingSlugs } from '@/lib/site'
 
@@ -69,10 +74,20 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="mt-16">
+      <div className="mt-12 flex flex-wrap items-start justify-center gap-4">
+        <AdsterraBanner unit={adsterra.banners.banner468Primary} />
+        <AdsterraBanner unit={adsterra.banners.rectangle300x250} />
+      </div>
+
+      <section className="mt-12">
         <SectionHeading kicker="Explore" title="Pick a topic" />
         <TopicGrid />
       </section>
+
+      <AdsterraNativeBanner
+        unit={adsterra.native.inArticle}
+        className="mt-12"
+      />
 
       <section className="mt-16 grid gap-12 lg:grid-cols-[2fr_1fr]">
         <div>
@@ -121,8 +136,15 @@ function HomePage() {
               About Daily Curio
             </Link>
           </div>
+          <div className="mt-8 flex justify-center">
+            <AdsterraBanner unit={adsterra.banners.skyscraper160x300} />
+          </div>
         </aside>
       </section>
+      <AdsterraBanner
+        unit={adsterra.banners.banner468Secondary}
+        className="mt-12"
+      />
     </div>
   )
 }

@@ -30,9 +30,9 @@ export const Route = createFileRoute('/privacy')({
         technologies to show ads, measure their performance, limit how often
         you see the same ad, and prevent fraud. They may collect information
         such as your IP address, device type, browser, approximate location,
-        and the pages you view. Ad units on this site are labeled
-        “Advertisement” and may link to advertiser pages that have their own
-        privacy policies.
+        and the pages you view. Ad units labeled “Advertisement” and links
+        marked “Sponsored” lead to advertiser pages run by these partners, and
+        those pages have their own privacy policies.
       </p>
       <p>
         Some ad formats may ask your permission to send browser notifications.
