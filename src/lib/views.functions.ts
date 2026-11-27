@@ -13,6 +13,15 @@ const slugInput = z.object({
     .refine((slug) => knownSlugs.has(slug), 'Unknown article'),
 })
 
+async function getViewsDb() {
+  try {
+    const { env } = await import('cloudflare:workers')
+    return (env as { DB?: D1Database }).DB
+  } catch {
+    return undefined
+  }
+}
+
 /**
  * Adds one view to an article and returns its new total.
  * Called on every article page load, so refreshes and new visitors both count.
@@ -20,18 +29,20 @@ const slugInput = z.object({
 export const recordView = createServerFn({ method: 'POST' })
   .validator(slugInput)
   .handler(async ({ data }) => {
-    const { sql } = await import('drizzle-orm')
-    const { db } = await import('../../db/index.js')
-    const { postViews } = await import('../../db/schema.js')
+    const db = await getViewsDb()
+    if (!db) return { views: 0 }
 
-    const [row] = await db
-      .insert(postViews)
-      .values({ slug: data.slug, views: 1 })
-      .onConflictDoUpdate({
-        target: postViews.slug,
-        set: { views: sql`${postViews.views} + 1`, updatedAt: sql`now()` },
-      })
-      .returning({ views: postViews.views })
+    const row = await db
+      .prepare(
+        `INSERT INTO post_views (slug, views, updated_at)
+         VALUES (?1, 1, datetime('now'))
+         ON CONFLICT(slug) DO UPDATE SET
+           views = post_views.views + 1,
+           updated_at = datetime('now')
+         RETURNING views`,
+      )
+      .bind(data.slug)
+      .first<{ views: number }>()
 
     return { views: row?.views ?? 0 }
   })
@@ -39,15 +50,15 @@ export const recordView = createServerFn({ method: 'POST' })
 /** View totals for every article, keyed by slug. */
 export const getViewCounts = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const { db } = await import('../../db/index.js')
-    const { postViews } = await import('../../db/schema.js')
+    const db = await getViewsDb()
+    if (!db) return {}
 
-    const rows = await db
-      .select({ slug: postViews.slug, views: postViews.views })
-      .from(postViews)
+    const { results } = await db
+      .prepare('SELECT slug, views FROM post_views')
+      .all<{ slug: string; views: number }>()
 
     const counts: Record<string, number> = {}
-    for (const row of rows) counts[row.slug] = row.views
+    for (const row of results ?? []) counts[row.slug] = row.views
     return counts
   },
 )

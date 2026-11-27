@@ -6,10 +6,10 @@ The layout is set up to bring in more pageviews per visit, which means more ad i
 
 ## Tech 
 
-- TanStack Start (React 19) + Vite, deployed on Netlify
+- TanStack Start (React 19) + Vite, deployed on Cloudflare Workers
 - Content Collections: articles are Markdown files in `content/posts/`
 - Tailwind CSS v4 + Typography
-- Netlify Image CDN for resized WebP cover images
+- Cloudflare D1 for article view counts and Workers Static Assets for images
 
 ## Adsterra ads
 
@@ -41,11 +41,17 @@ Put images in `public/img/`. Topic names in the main menu are set in `src/lib/si
 
 ```bash
 pnpm install
-netlify dev
+pnpm dev
+```
+
+## Deploy to Cloudflare Workers
+
+```bash
+pnpm run deploy
 ```
 
 ## Ideas for later
 
 - Publish new articles regularly. More good articles bring more search traffic and more impressions.
 - Add a sitemap and RSS feed for faster indexing.
-- Add a newsletter signup (Netlify Forms) to bring readers back.
+- Add a newsletter signup to bring readers back.

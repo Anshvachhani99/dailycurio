@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dailycurio",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2026-11-27",
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dailycurio-views",
+      "database_id": "7a527583-9a06-4fd3-a64c-a353e7166a67"
+    }
+  ]
+}

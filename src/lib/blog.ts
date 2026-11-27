@@ -30,10 +30,9 @@ export function formatDate(date: string) {
   }).format(new Date(`${date}T00:00:00Z`))
 }
 
-/** Serve local images through Netlify Image CDN, resized and as WebP. */
-export function cdnImage(src: string, width: number) {
-  if (!src.startsWith('/')) return src
-  return `/.netlify/images?url=${encodeURIComponent(src)}&w=${width}&fm=webp&q=75`
+/** Serve local images directly from static assets. */
+export function cdnImage(src: string, _width: number) {
+  return src
 }
 
 /** Posts sharing a category with `post`, newest first, then other posts to fill. */

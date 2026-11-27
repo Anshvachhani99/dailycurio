@@ -8,7 +8,7 @@ Multi-topic content site whose purpose is ad revenue via **Adsterra** (468x60 ba
 - `content-collections.ts` + `src/lib/post-content.ts`: schema, slug resolution, Markdown → sanitized HTML.
 - `src/lib/site.ts`: brand name/tagline, contact email, nav topics (`featuredCategories`), topic blurbs, homepage `trendingSlugs`.
 - `src/lib/ads.ts`: Adsterra config (`nativeSrc`, `nativeContainerId`, `bannerKey`, `bannerSrc`, `bannerWidth`, `bannerHeight`). `VITE_ADSTERRA_*` env vars override defaults. `src/components/adsterra-ad.tsx` renders both units on every page via `__root.tsx`.
-- `src/lib/blog.ts`: sorting, lookup, `cdnImage()` (Netlify Image CDN URLs), `relatedPosts()`, `readingTime()`.
+- `src/lib/blog.ts`: sorting, lookup, `cdnImage()` (static asset URLs), `relatedPosts()`, `readingTime()`.
 - `src/routes/`: `index` (landing page), `posts.$slug` (article + Up next + related + topics), `category.$category`, `about`, `contact`, `privacy`, `terms`.
 - `src/components/`: `post-card.tsx` (lg/md/sm cards), `topic-grid.tsx`, `static-page.tsx`, `category-links.tsx`.
 - `public/img/`: AI-generated cover images. Always render them through `cdnImage(src, width)`, never at full size.
